@@ -1,7 +1,8 @@
-
 import requests
-from bs4 import BeautifulSoup
-    
+from bs4 import BeautifulSoup  
+import re
+from datetime import datetime
+
 def parse():
     
     # final results in array of dictionary objects
@@ -10,7 +11,7 @@ def parse():
     # count of pages of webiste
     page_count = 1
 
-    state = ""
+    state = "MD"
 
     while(True):
         
@@ -47,6 +48,16 @@ def parse():
             date = location_date[0].text.strip()
             location = location_date[1].text.strip().replace("\n",", ")
 
+            # use regex to get standarzied dates
+            Match = re.search("(\w{3}) ([0-9\/]*)",date)
+            # format date object
+            date_object = datetime.strptime(Match.group(2), "%m/%d/%y")
+
+            # use regex to get city and state
+            Match = re.search("([A-Za-z ]+)([,]{1}) ([A-Z]{2}) ([A-Z]{2}), (\d{5})",location)
+            city_text = Match.group(1)
+            state_text = Match.group(3)
+
             # name is in an 'a' element
             name_element = name_distance.a
 
@@ -61,9 +72,8 @@ def parse():
                 tmp.append(distance.text)
             
             # add dictionary object to final list with name and list of distances
-            
-            final.append({"name": name_element.text, "distance":tmp, "location": location, "date": date})
-            #print(final)
+            final.append({"name": name_element.text, "distance":tmp, "state":state_text, "city":city_text, "date": date_object, "website": "runsignup"})
+           
             html_count+=1
             
             # break when we've processed 25, since they append a 26th griefer result
@@ -71,5 +81,7 @@ def parse():
                 break
 
         page_count += 1
+        if page_count == 3:
+            break
     
     return final
