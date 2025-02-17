@@ -68,6 +68,8 @@ def parse():
             
         # append everything to the dictionary obejct
         final.append({"name": name, "distance":tmp, "state":state_text, "city":city_text, "date": date_object, "website": "runwashington"})
+        
+        # for testing to limit number of records
         if len(races) == 3:
             break
 
