@@ -40,20 +40,26 @@ def parse():
         # we only want the city and want want to ignore nested elements with link to google maps
         location = location_element[2].contents[0].strip()
 
-        # use regex to get city and state
-        Match = re.search("([A-Za-z ]+)[,]{1} ([A-Za-z.]*) (\d{5})",location)
+        try:
+            # use regex to get city and state
+            Match = re.search(r"([A-Za-z ]+)[,]{1} ([A-Za-z.]*) (\d{5})",location)
+            print(name)
+            print(Match)
+            city_text = Match.group(1)
         
-        city_text = Match.group(1)
-        
-        match Match.group(2):
-            case "Maryland":
-                state_text = "MD"
-            case "Virginia":
-                state_text = "VA"
-            case "D.C.":
-                state_text = "DC"
-            case _:
-                state_text = ""
+            match Match.group(2):
+                case "Maryland":
+                    state_text = "MD"
+                case "Virginia":
+                    state_text = "VA"
+                case "D.C.":
+                    state_text = "DC"
+                case _:
+                    state_text = ""
+
+        except:
+            city_text = "N/A"
+            state_text = "N/A"
         
         try:
             # distances are in 'a' elements inside a div with class category
@@ -72,5 +78,5 @@ def parse():
         # for testing to limit number of records
         if len(races) == 3:
             break
-
+    
     return(final)

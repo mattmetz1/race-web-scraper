@@ -49,12 +49,12 @@ def parse():
             location = location_date[1].text.strip().replace("\n",", ")
 
             # use regex to get standarzied dates
-            Match = re.search("(\w{3}) ([0-9\/]*)",date)
+            Match = re.search(r"(\w{3}) ([0-9\/]*)",date)
             # format date object
             date_object = datetime.strptime(Match.group(2), "%m/%d/%y")
             
             # use regex to get city and state
-            Match = re.search("([A-Za-z !]+)([,]{1}) ([A-Z]{2}) ([A-Z]{2}), (\d{5})",location)
+            Match = re.search(r"([A-Za-z !]+)([,]{1}) ([A-Z]{2}) ([A-Z]{2}), (\d{5})",location)
             city_text = Match.group(1)
             state_text = Match.group(3)
 
