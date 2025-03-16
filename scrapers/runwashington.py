@@ -43,8 +43,6 @@ def parse():
         try:
             # use regex to get city and state
             Match = re.search(r"([A-Za-z ]+)[,]{1} ([A-Za-z.]*) (\d{5})",location)
-            print(name)
-            print(Match)
             city_text = Match.group(1)
         
             match Match.group(2):
